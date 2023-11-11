@@ -1,32 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BoardComponent } from './pages/board/board.component';
-import { BoardsComponent } from './pages/boards/boards.component';
-import { LoginComponent } from './pages/login/login.component';
-import { ScrollComponent } from './pages/scroll/scroll.component';
-import { TablesComponent } from './pages/tables/tables.component';
+import { AuthGuard } from '@guards/auth.guard';
+import { RedirectGuard } from '@guards/redirect.guard';
 
 const routes: Routes = [
   {
-    path: 'login',
-    component: LoginComponent
+    path: '',
+    loadChildren: () => import('./modules/auth/auth.module').then((m) => m.AuthModule),
+    canActivate: [RedirectGuard]
   },
   {
-    path: 'boards',
-    component: BoardsComponent
+    path: 'app',
+    loadChildren: () => import('./modules/layout/layout.module').then((m) => m.LayoutModule),
+    canActivate: [AuthGuard]
   },
-  {
-    path: 'board',
-    component: BoardComponent
-  },
-  {
-    path: 'scroll',
-    component: ScrollComponent
-  },
-  {
-    path: 'tables',
-    component: TablesComponent
-  }
 ];
 
 @NgModule({

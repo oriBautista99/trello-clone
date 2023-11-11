@@ -1,0 +1,90 @@
+<div class="container mx-auto mt-10 flex space-x-4">
+  <div class="w-1/4">
+    <div class="flex flex-col space-y-1 mb-6">
+      <div class="flex items-center space-x-2 p-1 rounded bg-white text-sky-900 font-bold hover:bg-sky-100 hover:text-sky-700">
+        <fa-icon [icon]="faTrello"></fa-icon>
+        <span class="text-sm ">Boards</span>
+      </div>
+      <div class="flex items-center space-x-2 p-1 rounded bg-white text-sky-900 font-bold hover:bg-sky-100 hover:text-sky-700">
+        <fa-icon [icon]="faBox"></fa-icon>
+        <span class="text-sm ">Templates</span>
+      </div>
+      <div class="flex items-center space-x-2 p-1 rounded bg-white text-sky-900 font-bold hover:bg-sky-100 hover:text-sky-700">
+        <fa-icon [icon]="faWaveSquare"></fa-icon>
+        <span class="text-sm ">Home</span>
+      </div>
+    </div>
+    <cdk-accordion>
+      <cdk-accordion-item #accordiumMenu="cdkAccordionItem">
+        <button class="w-full py-1 px-2 flex justify-between items-center text-sky-900 font-bold" type="button" (click)="accordiumMenu.toggle()">
+          My workspace
+          <fa-icon [icon]="accordiumMenu.expanded ? faAngleUp : faAngleDown"></fa-icon>
+        </button>
+        <div
+        [ngClass]="{
+          hidden: !accordiumMenu.expanded,
+          block: accordiumMenu.expanded
+        }"
+      >
+        <ul class="ml-2 flex flex-col text-sm text-sky-900">
+          <li>
+            <a class="block py-1 px-3"
+              ><fa-icon [icon]="faTrello"></fa-icon> Boards</a
+            >
+          </li>
+          <li>
+            <a class="block py-1 px-3"
+              ><fa-icon [icon]="faHeart"></fa-icon> Highlights</a
+            >
+          </li>
+          <li>
+            <a class="block py-1 px-3"
+              ><fa-icon [icon]="faBorderAll"></fa-icon> Views</a
+            >
+          </li>
+          <li>
+            <a class="block py-1 px-3"
+              ><fa-icon [icon]="faUsers"></fa-icon> Members</a
+            >
+          </li>
+          <li>
+            <a class="block py-1 px-3"
+              ><fa-icon [icon]="faGear"></fa-icon> Settings</a
+            >
+          </li>
+        </ul>
+      </div>
+      </cdk-accordion-item>
+    </cdk-accordion>
+    <cdk-accordion>
+      <cdk-accordion-item #accordionItem="cdkAccordionItem" *ngFor="let item of items">
+        <button class="w-full text-left" type="button" (click)="accordionItem.toggle()">{{item.label}}</button>
+        <div [style.display]="accordionItem.expanded ? '' : 'none'">
+          <ul>
+            <li *ngFor="let subitem of item.items">{{subitem.label}}</li>
+          </ul>
+        </div>
+      </cdk-accordion-item>
+    </cdk-accordion>
+  </div>
+  <div class="w-3/4">
+    <div class="w-full fles space-x-2 justify-start items-center text-sky-900 mb-2">
+      <fa-icon [icon]="faClock"></fa-icon>
+      <span class="text-base font-bold">Recently viewed</span>
+    </div>
+    <div class="w-full flex space-x-2">
+      <div class="bg-sky-600 w-44 h-20 rounded p-2 text-white">
+        Board 1
+      </div>
+      <div class="bg-yellow-600 w-44 h-20 rounded p-2 text-white">
+        Board 1
+      </div>
+      <div class="bg-gray-600 w-44 h-20 rounded p-2 text-white">
+        Board 1
+      </div>
+      <div class="bg-green-600 w-44 h-20 rounded p-2 text-white">
+        Board 1
+      </div>
+    </div>
+  </div>
+</div>
