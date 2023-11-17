@@ -29,7 +29,7 @@ export class AuthService {
     .pipe(
       tap(response => {
         this.tokenService.saveToken(response.access_token);
-        this.tokenService.saveToken(response.refres_token);
+        this.tokenService.saveRefresToken(response.refresh_token);
       })
     );
   }
@@ -62,7 +62,7 @@ export class AuthService {
     .pipe(
       tap(response => {
         this.tokenService.saveToken(response.access_token);
-        this.tokenService.saveToken(response.refres_token);
+        this.tokenService.saveRefresToken(response.refresh_token);
       })
     );
   }
