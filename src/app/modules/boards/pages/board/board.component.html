@@ -12,14 +12,14 @@
             >
           </div>
 
-          <div class="text-sm mt-2 min-h-[2.5rem] p-2 bg-gray-300 rounded" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="list.cards">
+          <div class="text-sm mt-2 min-h-[2.5rem] p-2 bg-gray-300 rounded" [id]="list.id" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="list.cards">
             <div
               (click)="openDialog(card)"
-              *ngFor="let card of board?.cards"
+              *ngFor="let card of list?.cards"
               cdkDrag
               class="bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400"
             >
-              {{card.title}}
+              {{card.title}} - {{card.position}}
             </div>
 
           </div>

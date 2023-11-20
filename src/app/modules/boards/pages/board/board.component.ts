@@ -8,6 +8,7 @@ import { BoardsService } from '@services/boards.service';
 import { ActivatedRoute } from '@angular/router';
 import { Board } from '@models/board.model';
 import { Card } from '@models/card.model';
+import { CardService } from '@services/card.service';
 
 
 @Component({
@@ -84,7 +85,8 @@ export class BoardComponent implements OnInit {
   constructor(
     private dialog: Dialog,
     private route: ActivatedRoute,
-    private boardService: BoardsService
+    private boardService: BoardsService,
+    private cardService: CardService
   ){
   }
 
@@ -99,7 +101,11 @@ export class BoardComponent implements OnInit {
 
   drop(event:CdkDragDrop<Card[]>){
     if (event.previousContainer == event.container){
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
     } else {
       transferArrayItem(
         event.previousContainer.data,
@@ -108,7 +114,11 @@ export class BoardComponent implements OnInit {
         event.currentIndex
       );
     }
-
+    const position = this.boardService.getPosition(event.container.data,event.currentIndex);
+    const card = event.container.data[event.currentIndex];
+    const listId = event.container.id;
+    this.updateCard(card, position, listId);
+    console.log(position);
   }
 
   addColumn(){
@@ -138,6 +148,13 @@ export class BoardComponent implements OnInit {
     this.boardService.getBoard(id).subscribe( board => {
       this.board = board;
     });
+  }
+
+  private updateCard(card: Card, position: number, listId: string | number){
+    this.cardService.update(card.id, {position, listId})
+      .subscribe((cardUpdated) => {
+        console.log(cardUpdated);
+      });
   }
 
 }
