@@ -9,6 +9,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Board } from '@models/board.model';
 import { Card } from '@models/card.model';
 import { CardService } from '@services/card.service';
+import { List } from '@models/list.model';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -33,54 +35,14 @@ export class BoardComponent implements OnInit {
   faPlus = faPlus;
   faFloppyDisk = faFloppyDisk;
   faXmark = faXmark;
-
-  columns: Column[] = [
-    {
-      title: 'ToDo',
-      todos: [
-        {
-          id:'1',
-          title: 'Task 1'
-        },
-        {
-          id:'2',
-          title: 'Task 2'
-        },
-        {
-          id:'3',
-          title: 'Task 3'
-        }
-      ],
-      newCard: '',
-      showFormAddCard: false
-    },
-    {
-      title: 'Doing',
-      todos: [
-        {
-          id:'5',
-          title: 'Task 5'
-        }
-      ],
-      newCard: '',
-      showFormAddCard: false
-    },
-    {
-      title: 'Done',
-      todos:[
-        {
-          id:'4',
-          title: 'Task 4'
-        }
-      ],
-      newCard: '',
-      showFormAddCard: false
-    }
-  ];
+  showModal: boolean = false;
 
   board: Board | null = null;
   showFormAddCard: boolean = false;
-  formCardAdd: any;
+  formCardAdd = new FormControl<string>('',{
+    nonNullable: true,
+    validators: Validators.required
+  });
 
   constructor(
     private dialog: Dialog,
@@ -96,7 +58,7 @@ export class BoardComponent implements OnInit {
       if(id){
         this.getBoard(id);
       }
-    })
+    });
   }
 
   drop(event:CdkDragDrop<Card[]>){
@@ -118,16 +80,31 @@ export class BoardComponent implements OnInit {
     const card = event.container.data[event.currentIndex];
     const listId = event.container.id;
     this.updateCard(card, position, listId);
-    console.log(position);
+  }
+
+  createCard(list: List){
+    const title = this.formCardAdd.value;
+    console.log(title);
+    if(this.board){
+      this.cardService.create({
+        title: title,
+        boardId: this.board.id,
+        listId: list.id,
+        position: this.boardService.getPositionNewCard(list.cards)
+      }).subscribe( card => {
+        list.cards.push(card);
+        this.formCardAdd.setValue('');
+        this.showFormAddCard = false;
+      });
+    }
+  }
+
+  closeCardForm(list: List){
+    list.showCardForm = !list.showCardForm;
   }
 
   addColumn(){
-    // this.columns.push({
-    //   title: 'Nueva',
-    //   todos: [],
-    //   newCard: '',
-    //   showFormAddCard: false
-    // })
+
   }
 
   openDialog(card: Card){
@@ -155,6 +132,24 @@ export class BoardComponent implements OnInit {
       .subscribe((cardUpdated) => {
         console.log(cardUpdated);
       });
+  }
+
+  openFormCard(list: List){
+    list.showCardForm = !list.showCardForm;
+    if(this.board?.lists){
+      this.board.lists = this.board.lists.map(itertorList => {
+        if(itertorList.id == list.id){
+          return {
+            ...itertorList,
+            showCardForm: true
+          }
+        }
+        return {
+          ...itertorList,
+          showCardForm: false
+        }
+      });
+    }
   }
 
 }

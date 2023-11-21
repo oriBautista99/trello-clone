@@ -24,33 +24,34 @@
 
           </div>
 
-          <!-- <div *ngIf="!column.showFormAddCard" class="flex justify-between items-center py-1">
-            <div class="flex w-2/3 space-x-2 items-center cursor-pointer rounded hover:bg-gray-300">
-              <a class="block py-2 px-3 text-sm" (click)="column.showFormAddCard = !column.showFormAddCard">
-                <fa-icon [icon]="faPlus"></fa-icon>
-                Add card
-              </a>
-            </div>
+          <div *ngIf="!list.showCardForm" class="mt-5 flex justify-between items-center py-1">
+            <app-btn color="light" class="flex space-x-2 items-center justify-between text-sm"
+              (click)="openFormCard(list)">
+              <fa-icon [icon]="faPlus"></fa-icon>
+              <span>Add Card</span>
+            </app-btn>
             <a class="block py-2 px-3 text-sm ">
               <fa-icon [icon]="faFloppyDisk"></fa-icon>
             </a>
           </div>
-          <div *ngIf="column.showFormAddCard" class="py-2">
+          <div class="py-2" *ngIf="list.showCardForm">
             <div class="flex flex-col space-y-1 w-full">
-              <textarea class="rounded border-gray-300 shadow" matInput name="formCardAdd" cols="30" rows="3"></textarea>
+              <textarea class="rounded border-gray-300 shadow" matInput [formControl]="formCardAdd" cols="30" rows="3"></textarea>
               <div class="flex justify-between items-center">
                 <div class="flex items-center justify-center">
-                  <button class="bg-primary-500 text-white px-2 py-2 rounded text-sm">Add card</button>
-                  <a class="flex items-center px-3 text-lg cursor-pointer" (click)="column.showFormAddCard = !column.showFormAddCard">
+                  <app-btn color="success" (click)="createCard(list)">
+                    Create
+                  </app-btn>
+                  <app-btn color="light" (click)="closeCardForm(list)">
                     <fa-icon [icon]="faXmark"></fa-icon>
-                  </a>
+                  </app-btn>
                 </div>
-                <a class="block py-1 px-3"
-                  ><fa-icon [icon]="faEllipsis"></fa-icon></a
-                >
+                <app-btn color="light">
+                  <fa-icon [icon]="faEllipsis"></fa-icon>
+                </app-btn>
               </div>
             </div>
-          </div> -->
+          </div>
         </div>
         <button class="shrink-0" (click)="addColumn()">Add column</button>
       </div>

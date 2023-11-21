@@ -23,7 +23,7 @@ export const COLORS: ObjColors = {
   },
   light: {
     'bg-gray-200': true,
-    'hover:bg-gray-500': true,
+    'hover:bg-gray-300': true,
     'focus:ring-gray-50': true,
     'text-gray-700': true,
   },
