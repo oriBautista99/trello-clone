@@ -72,19 +72,12 @@
       <fa-icon [icon]="faClock"></fa-icon>
       <span class="text-base font-bold">Recently viewed</span>
     </div>
-    <div class="w-full flex space-x-2">
-      <div class="bg-sky-600 w-44 h-20 rounded p-2 text-white">
-        Board 1
-      </div>
-      <div class="bg-yellow-600 w-44 h-20 rounded p-2 text-white">
-        Board 1
-      </div>
-      <div class="bg-gray-600 w-44 h-20 rounded p-2 text-white">
-        Board 1
-      </div>
-      <div class="bg-green-600 w-44 h-20 rounded p-2 text-white">
-        Board 1
-      </div>
+    <div class="grid grid-cols-4 gap-4">
+      <a *ngFor="let board of boards" [routerLink]="['/app/boards', board.id]">
+        <app-card-color [color]="board.backgroundColor">
+          {{board.title}}
+        </app-card-color>
+      </a>
     </div>
   </div>
 </div>

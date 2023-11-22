@@ -1,58 +1,80 @@
-  <div class="w-full grow bg-sky-600 px-4 pb-4">
+  <div class="w-full h-full grow px-4 pb-4" [ngClass]="colors">
     <div class="flex flex-col h-full">
       <div>
-        <h2 class="text-xl font-bold text-white my-4">Demo Board</h2>
+        <h2 class="text-xl font-bold text-white my-4">{{board?.title}}</h2>
       </div>
       <div class="flex grow items-start w-full h-full overflow-x-scroll" cdkDropListGroup>
-        <div class="rounded bg-gray-200 w-72 p-2 mr-3 shrink-0" *ngFor="let column of columns">
+        <div class="rounded bg-gray-200 w-72 p-2 mr-3 shrink-0" *ngFor="let list of board?.lists">
           <div class="flex justify-between items-center py-1">
-            <h3 class="text-sm font-bold ml-2">{{column.title}}</h3>
+            <h3 class="text-sm font-bold ml-2">{{list.title}}</h3>
             <a class="block py-1 px-3"
               ><fa-icon [icon]="faEllipsis"></fa-icon></a
             >
           </div>
 
-          <div class="text-sm mt-2 min-h-[2.5rem] p-2 bg-gray-300 rounded" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="column.todos">
+          <div class="text-sm mt-2 min-h-[2.5rem] p-2 bg-gray-300 rounded" [id]="list.id" cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="list.cards">
             <div
-              (click)="openDialog(todo)"
-              *ngFor="let todo of column.todos"
+              (click)="openDialog(card)"
+              *ngFor="let card of list?.cards"
               cdkDrag
               class="bg-white shadow p-2 rounded mt-2 border-b border-x-gray-300 cursor-pointer hover:bg-gray-400"
             >
-              {{todo.title}}
+              {{card.title}}
             </div>
 
           </div>
 
-          <div *ngIf="!column.showFormAddCard" class="flex justify-between items-center py-1">
-            <div class="flex w-2/3 space-x-2 items-center cursor-pointer rounded hover:bg-gray-300">
-              <a class="block py-2 px-3 text-sm" (click)="column.showFormAddCard = !column.showFormAddCard">
-                <fa-icon [icon]="faPlus"></fa-icon>
-                Add card
-              </a>
-            </div>
+          <div *ngIf="!list.showCardForm" class="mt-5 flex justify-between items-center py-1">
+            <app-btn color="light" class="flex space-x-2 items-center justify-between text-sm"
+              (click)="openFormCard(list)">
+              <fa-icon [icon]="faPlus"></fa-icon>
+              <span>Add Card</span>
+            </app-btn>
             <a class="block py-2 px-3 text-sm ">
               <fa-icon [icon]="faFloppyDisk"></fa-icon>
             </a>
           </div>
-          <div *ngIf="column.showFormAddCard" class="py-2">
+          <div class="py-2" *ngIf="list.showCardForm">
             <div class="flex flex-col space-y-1 w-full">
-              <textarea class="rounded border-gray-300 shadow" matInput name="formCardAdd" cols="30" rows="3"></textarea>
+              <textarea class="rounded border-gray-300 shadow" matInput [formControl]="formCardAdd" cols="30" rows="3"></textarea>
               <div class="flex justify-between items-center">
                 <div class="flex items-center justify-center">
-                  <button class="bg-primary-500 text-white px-2 py-2 rounded text-sm">Add card</button>
-                  <a class="flex items-center px-3 text-lg cursor-pointer" (click)="column.showFormAddCard = !column.showFormAddCard">
+                  <app-btn color="success" (click)="createCard(list)">
+                    Create
+                  </app-btn>
+                  <app-btn color="light" (click)="closeCardForm(list)">
                     <fa-icon [icon]="faXmark"></fa-icon>
-                  </a>
+                  </app-btn>
                 </div>
-                <a class="block py-1 px-3"
-                  ><fa-icon [icon]="faEllipsis"></fa-icon></a
-                >
+                <app-btn color="light">
+                  <fa-icon [icon]="faEllipsis"></fa-icon>
+                </app-btn>
               </div>
             </div>
           </div>
         </div>
-        <button class="shrink-0" (click)="addColumn()">Add column</button>
+        <div class="rounded bg-gray-200 w-72 p-2 mr-3 shrink-0">
+          <app-btn *ngIf="showListForm" color="light" (click)="showListForm = !showListForm">Add another list</app-btn>
+          <div class="py-2" *ngIf="!showListForm">
+            <div class="flex flex-col space-y-1 w-full">
+              <textarea class="rounded border-gray-300 shadow" matInput [formControl]="formListAdd" cols="30" rows="3"></textarea>
+              <div class="flex justify-between items-center">
+                <div class="flex items-center justify-center">
+                  <app-btn color="success" (click)="addList()">
+                    Create
+                  </app-btn>
+                  <app-btn color="light" (click)="showListForm = !showListForm">
+                    <fa-icon [icon]="faXmark"></fa-icon>
+                  </app-btn>
+                </div>
+                <app-btn color="light">
+                  <fa-icon [icon]="faEllipsis"></fa-icon>
+                </app-btn>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

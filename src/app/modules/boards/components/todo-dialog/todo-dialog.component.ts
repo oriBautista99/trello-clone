@@ -1,10 +1,11 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Component, Inject } from '@angular/core';
 import { faBars, faCheckSquare, faCheckToSlot, faClock, faClose, faTag, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Card } from '@models/card.model';
 import { ToDo } from 'src/app/models/todo.model';
 
 interface inputData{
-  todo: ToDo
+  card: Card
 }
 
 interface outputData{
@@ -25,13 +26,13 @@ export class TodoDialogComponent {
   faCheckSquare = faCheckSquare;
   faClock = faClock;
 
-  todo!: ToDo;
+  card!: Card;
 
   constructor(
     private dialogRef: DialogRef<outputData>,
     @Inject(DIALOG_DATA) private data:inputData
   ){
-    this.todo = data.todo;
+    this.card = data.card;
   }
 
   close(){

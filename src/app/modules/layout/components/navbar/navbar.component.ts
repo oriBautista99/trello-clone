@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faBell, faInfoCircle, faClose, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { Colors, NAVBAR_BACKGROUNDS } from '@models/colors.model';
 import { AuthService } from '@services/auth.service';
+import { BoardsService } from '@services/boards.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,14 +19,20 @@ export class NavbarComponent implements OnInit{
 
   isOpenOverlayAvatar = false;
   isOpenOverlayBoards = false;
+  isOpenOverlayCreatBoard = false;
 
   user$ = this.authServices.user$;
+  navbarBackgroundColor: Colors = 'sky';
+  navbarColors = NAVBAR_BACKGROUNDS
 
   constructor(
     private authServices: AuthService,
-    private router: Router
+    private router: Router,
+    private boardService: BoardsService
   ){
-
+    this.boardService.backgroundColor$.subscribe(color => {
+      this.navbarBackgroundColor = color;
+    });
   }
 
   ngOnInit(): void {
@@ -34,5 +42,14 @@ export class NavbarComponent implements OnInit{
   logout(){
     this.authServices.logout();
     this.router.navigate(['/login']);
+  }
+
+  close(event: boolean){
+    this.isOpenOverlayCreatBoard = event;
+  }
+
+  get colors(){
+    const classes = this.navbarColors[this.navbarBackgroundColor];
+    return classes ? classes : {};
   }
 }
