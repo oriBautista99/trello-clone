@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { Dialog } from '@angular/cdk/dialog';
 import { Column, ToDo } from 'src/app/models/todo.model';
@@ -11,6 +11,8 @@ import { Card } from '@models/card.model';
 import { CardService } from '@services/card.service';
 import { List } from '@models/list.model';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ListsService } from '@services/lists.service';
+import { BACKGROUNDS } from '@models/colors.model';
 
 
 @Component({
@@ -29,17 +31,24 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
     `
   ]
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
 
   faEllipsis = faEllipsis;
   faPlus = faPlus;
   faFloppyDisk = faFloppyDisk;
   faXmark = faXmark;
-  showModal: boolean = false;
+  showListForm: boolean = true;
 
   board: Board | null = null;
   showFormAddCard: boolean = false;
+  colorBackgrounds = BACKGROUNDS;
+
   formCardAdd = new FormControl<string>('',{
+    nonNullable: true,
+    validators: Validators.required
+  });
+
+  formListAdd = new FormControl<string>('',{
     nonNullable: true,
     validators: Validators.required
   });
@@ -48,7 +57,8 @@ export class BoardComponent implements OnInit {
     private dialog: Dialog,
     private route: ActivatedRoute,
     private boardService: BoardsService,
-    private cardService: CardService
+    private cardService: CardService,
+    private listsService: ListsService
   ){
   }
 
@@ -84,13 +94,12 @@ export class BoardComponent implements OnInit {
 
   createCard(list: List){
     const title = this.formCardAdd.value;
-    console.log(title);
     if(this.board){
       this.cardService.create({
         title: title,
         boardId: this.board.id,
         listId: list.id,
-        position: this.boardService.getPositionNewCard(list.cards)
+        position: this.boardService.getPositionNewItem(list.cards)
       }).subscribe( card => {
         list.cards.push(card);
         this.formCardAdd.setValue('');
@@ -103,8 +112,23 @@ export class BoardComponent implements OnInit {
     list.showCardForm = !list.showCardForm;
   }
 
-  addColumn(){
-
+  addList(){
+    const title = this.formListAdd.value;
+    console.log(title);
+    if (this.board) {
+      this.listsService.create({
+        title,
+        boardId: this.board.id,
+        position: this.boardService.getPositionNewItem(this.board.lists)
+      }).subscribe( list => {
+        this.board?.lists.push({
+          ...list,
+          cards: []
+        });
+        this.showListForm = false;
+        this.formListAdd.setValue('');
+      });
+    }
   }
 
   openDialog(card: Card){
@@ -124,6 +148,7 @@ export class BoardComponent implements OnInit {
   private getBoard(id: string){
     this.boardService.getBoard(id).subscribe( board => {
       this.board = board;
+      this.boardService.setBackgroundColor(this.board.backgroundColor);
     });
   }
 
@@ -152,4 +177,15 @@ export class BoardComponent implements OnInit {
     }
   }
 
+  get colors() {
+    if(this.board){
+      const classes = this.colorBackgrounds[this.board.backgroundColor];
+      return classes ? classes : {}
+    }
+    return {};
+  }
+
+  ngOnDestroy(): void {
+    this.boardService.setBackgroundColor('sky');
+  }
 }
