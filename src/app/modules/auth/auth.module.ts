@@ -16,6 +16,7 @@ import { RegisterFormComponent } from './components/register-form/register-form.
 import { ForgotPasswordFormComponent } from './components/forgot-password-form/forgot-password-form.component';
 import { RecoveryFormComponent } from './components/recovery-form/recovery-form.component';
 import { BackgroundComponent } from './components/background/background.component';
+import { SocialButtonComponent } from './components/social-button/social-button.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { BackgroundComponent } from './components/background/background.componen
     ForgotPasswordFormComponent,
     BackgroundComponent,
     RecoveryComponent,
-    RecoveryFormComponent
+    RecoveryFormComponent,
+    SocialButtonComponent
   ],
   imports: [
     CommonModule,

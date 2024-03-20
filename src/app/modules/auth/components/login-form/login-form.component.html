@@ -1,4 +1,4 @@
-<h1 class="text-center font-bold py-2 text-gray-700">Log in to Trello</h1>
+<h1 class="text-center font-medium pb-4 text-gray-700">Log in to continue</h1>
 <form [formGroup]="form" novalidate class="space-y-4" (ngSubmit)="doLogin()">
   <div>
     <div class="relative">
@@ -65,7 +65,7 @@
   <div>
     <app-btn
       typeBtn="submit"
-      color="success"
+      color="sky"
       [loading]="status === 'loading'"
       >Login</app-btn
     >
