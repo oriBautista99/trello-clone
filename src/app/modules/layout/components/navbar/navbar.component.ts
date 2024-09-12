@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faBell, faInfoCircle, faClose, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faInfoCircle, faClose, faAngleDown, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Colors, NAVBAR_BACKGROUNDS } from '@models/colors.model';
 import { AuthService } from '@services/auth.service';
 import { BoardsService } from '@services/boards.service';
@@ -16,6 +16,7 @@ export class NavbarComponent implements OnInit{
   faClose = faClose;
   isOpen = false;
   faAngleDown = faAngleDown;
+  faUser = faUser;
 
   isOpenOverlayAvatar = false;
   isOpenOverlayBoards = false;
